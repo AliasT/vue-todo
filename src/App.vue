@@ -1,24 +1,17 @@
 <template>
-  <div id="app">
-    <div id="user">
-      <hello></hello>
-    </div>
-  </div>
+  <music-item></music-item>
 </template>
 
 <script>
+import MusicItem from './components/music/MusicItem'
 
-  import Vue from 'vue'
-  import Hello from 'components/Hello'
-
-  export default {
-    components: {
-      Hello
-    }
+export default {
+  components: {
+    MusicItem
   }
-
-
+}
 </script>
 
 <style>
+
 </style>
