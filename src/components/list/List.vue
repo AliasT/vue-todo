@@ -8,9 +8,6 @@ import todo from 'src/js/todo'
 
 export default {
   props: ['todo'],
-  data: {
-    
-  }
   methods: {
     // 更新内容
     updateContent (event) {
