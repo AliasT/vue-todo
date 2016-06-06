@@ -1,23 +1,21 @@
 <template>
-  <input type="checkbox" v-model="todo.isCompleted" v-on:click="updateStatus" />
+  <input type="checkbox" v-model="todo.isCompleted" v-on:click="updateContent" />
   <input type="text" v-model="todo.content" @keyup.enter="updateContent" v-on:blur="updateContent" />
 </template>
 
 <script>
-import storage from 'src/js/storage'
+import todo from 'src/js/todo'
 
 export default {
   props: ['todo'],
+  data: {
+    
+  }
   methods: {
-    // 更新状态
-    updateStatus (event) {
-      this.isCompleted = !this.isCompleted
-    },
-
     // 更新内容
     updateContent (event) {
       this.content = event.target.value
-      storage.updateItem(this.todo)
+      todo.updateTodo(this.todo)
       this.$dispatch('updated')
     }
   }

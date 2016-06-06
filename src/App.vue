@@ -1,7 +1,7 @@
 <template>
-  <p-head></p-head>
   <!-- 输入框 -->
-  <list :todo="defaultTodo"></list>
+  <input type="checkbox" v-model="todo.isCompleted" v-on:click="updateContent" />
+  <input type="text" v-model="todo.content" @keyup.enter="updateContent" v-on:blur="updateContent" />
   <div id="item-list">
     <ul>
       <li v-for="todo in todos">
@@ -13,9 +13,8 @@
 
 <script>
 // import Vue from 'vue'
-import PHead from './components/include/Header'
 import List from './components/list/List'
-import storage from 'src/js/storage'
+import todo from 'src/js/todo'
 
 export default {
   data () {
@@ -25,18 +24,18 @@ export default {
         content: '',
         isCompleted: false
       },
-      todos: storage.getTodos(1464946412042)
+      todos: todo.getTodos(1464946412042)
     }
   },
 
   components: {
-    PHead,
     List
   },
 
   // 监听子组件事件
   events: {
     updated () {
+      this.todos = todo.getTodos(1464946412042)
     }
   }
 }
