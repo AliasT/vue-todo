@@ -10,7 +10,7 @@
   <div id="item-list">
     <ul>
       <li v-for="todo in todos">
-        <list :todo="todo"></list>
+        <list :todo.sync="todo"></list>
       </li>
     </ul>
   </div>
