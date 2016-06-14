@@ -29,6 +29,20 @@ export default {
     })
   },
 
+  getCompleted (listId) {
+    const todos = this.getTodos(listId)
+    return _.filter(todos, function (todo, index) {
+      return todo.isCompleted === true
+    })
+  },
+
+  getUnCompleted (listId) {
+    const todos = this.getTodos(listId)
+    return _.filter(todos, function (todo, index) {
+      return todo.isCompleted === false
+    })
+  },
+
   // 移除todo
   removeTodo (todo) {
     let list = storage.getItem(todo.listId)

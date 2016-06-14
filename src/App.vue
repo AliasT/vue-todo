@@ -47,7 +47,7 @@
       return {
         // 默认数据
         defaultTodo: _.extend({}, defaultTodo),
-        todos: todo.getTodos(1464946412042)
+        todos: todo.getCompleted(1464946412042)
       }
     },
 
