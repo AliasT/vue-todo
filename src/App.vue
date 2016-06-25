@@ -1,11 +1,14 @@
 <template>
   <div id="app">
+    <!-- 文件夹列表 -->
     <div id="pages">
-      <p>+</p>
+      <p @click="newDirectory">+</p>
       <ul class="pages-list">
         <li v-for="page in pages">
-
+          
         </li>
+        <!-- 用来新增文件夹的输入框 -->
+        <li><input type="text" placeholder="文件夹名称" :class="{ 'hidden': createdIsDone } " @keyup.enter="addDirectory"></li>
       </ul>
     </div>
 
@@ -31,6 +34,7 @@
 <script>
   import List from './components/list/List'
   import todo from 'src/js/todo'
+  import directory from 'src/js/directory'
   import _ from 'underscore'
 
   const defaultTodo = {
@@ -47,7 +51,8 @@
       return {
         // 默认数据
         defaultTodo: _.extend({}, defaultTodo),
-        todos: todo.getCompleted(1464946412042)
+        todos: todo.getCompleted(1464946412042),
+        createdIsDone: true
       }
     },
 
@@ -56,6 +61,19 @@
         const newTodo = todo.addTodo(this.defaultTodo, 1464946412042)
         this.defaultTodo = _.extend({}, defaultTodo)
         this.todos.unshift(newTodo)
+      },
+
+      newDirectory (event) {
+        this.createdIsDone = false
+      },
+
+      addDirectory (event) {
+        const target = event.target
+        const value = target.value.trim()
+
+        console.log(directory)
+        directory.create({ name: value })
+        this.createdIsDone = true
       }
     },
     // 监听子组件事件
@@ -82,5 +100,9 @@
 
   #detail {
     float: right;
+  }
+
+  .hidden {
+    display: none;
   }
 </style>
