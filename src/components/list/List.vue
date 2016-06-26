@@ -1,6 +1,8 @@
 <template>
-  <input type="checkbox" v-model="todo.isCompleted" @click="updateStatus" />
-  <input type="text" v-model="todo.content" @keyup.enter="updateContent" @blur="updateContent" />
+  <p>
+    <input type="checkbox" v-model="todo.isCompleted" @click="updateStatus" />
+    <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateContent" @blur="updateContent" />
+  </p>
 </template>
 
 <script>
@@ -28,6 +30,6 @@ export default {
 
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 
 </style>
