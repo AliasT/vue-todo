@@ -1,6 +1,6 @@
 import storage from 'src/js/storage'
 import _ from 'underscore'
-
+import $ from 'jquery'
 export default {
   // 添加todo
   addTodo (todo, listId) {
@@ -22,10 +22,12 @@ export default {
   },
 
   // 获取所有todos
-  getTodos (listId) {
-    const list = storage.getItem(listId)
-    return _.map(list, function (todoId, index) {
-      return storage.getItem(todoId)
+  getTodos (directoryId, fn) {
+    $.ajax({
+      url: ['/directory/', directoryId, '/todo'].join(''),
+      method: 'get'
+    }).done(function (resJSON) {
+      fn(resJSON)
     })
   },
 

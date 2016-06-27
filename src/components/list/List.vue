@@ -1,6 +1,6 @@
 <template>
   <p>
-    <input type="checkbox" v-model="todo.isCompleted" @click="updateStatus" />
+    <input type="checkbox" v-model="todo.is_completed" @click="updateStatus" />
     <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateContent" @blur="updateContent" />
   </p>
 </template>
