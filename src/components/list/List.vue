@@ -31,11 +31,16 @@ import _ from 'underscore'
 
 const defaultTodo = {
   content: '',
-  isCompleted: false
+  is_completed: false
 }
 
 export default {
-  props: ['todo'],
+  data () {
+    return {
+      defaultTodo: _.extend({}, defaultTodo),
+      todos: []
+    }
+  },
   methods: {
     updateStatus (event) {
       this.todo.isCompleted = !this.todo.isCompleted
@@ -56,6 +61,14 @@ export default {
       const newTodo = todo.addTodo(this.defaultTodo, 1464946412042)
       this.defaultTodo = _.extend({}, defaultTodo)
       this.todos.unshift(newTodo)
+    }
+  },
+
+  events: {
+    updateDirectoryId: function (directoryId) {
+      todo.getTodos(directoryId, (resJSON) => {
+        this.todos = resJSON
+      })
     }
   }
 }

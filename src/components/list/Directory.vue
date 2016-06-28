@@ -2,9 +2,9 @@
   <!-- 文件夹列表 -->
   <div id="pages">
     <p @click="newDirectory" class="page-button">+</p>
-    <ul class="pages-list" @click.prevent="showCurrent" @dbclick="editDirectory">
+    <ul class="pages-list"  @dbclick="editDirectory">
       <!-- track_by是必须的 -->
-      <li v-for="directory in directories" track-by="$index" data-index="{{$index}}">          
+      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @click.prevent="showCurrent(directory._id.$oid)">          
         <p><input type="text" value="{{ directory.name }}"></p>
       </li>
       <!-- 用来新增文件夹的输入框 -->
@@ -18,6 +18,7 @@
 <script>
   import directory from 'src/js/directory'
   import _ from 'underscore'
+  // import $ from 'jquery'
 
   export default {
     data () {
@@ -39,7 +40,7 @@
     // 数据监听列表
     watch: {
       'currentDirectoryId': function (newVal, oldVal) {
-
+        this.$parent.$broadcast('updateDirectoryId', newVal)
       }
     },
     // 事件列表
@@ -59,8 +60,8 @@
       },
 
       // 文件夹选择
-      showCurrent (event) {
-        
+      showCurrent (id) {
+        this.currentDirectoryId = id
       }
     }
   }
