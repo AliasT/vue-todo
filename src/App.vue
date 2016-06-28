@@ -66,9 +66,6 @@
     ul {
       li {
         border-bottom: $li-border;
-        input {
-          background: #eee;
-        }
       }
     }
 

@@ -4,8 +4,8 @@
     <p @click="newDirectory" class="page-button">+</p>
     <ul class="pages-list"  >
       <!-- track_by是必须的 -->
-      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(directory._id.$oid)" >          
-        <p><input type="text" value="{{ directory.name }}" :disabled="directory.isEditing" @keyup.enter="updateDirectory(directory)"></p>
+      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(directory._id.$oid, $index)" >          
+        <p><input type="text" value="{{ directory.name }}" disabled :class="{ 'white-bg': currentIndex === $index }"@keyup.enter="updateDirectory(directory)"></p>
       </li>
       <!-- 用来新增文件夹的输入框 -->
       <li>
@@ -21,13 +21,15 @@
   // import $ from 'jquery'
 
   var clicked = null
+  var isEditing = false
 
   export default {
     data () {
       return {
         directories: [],
         createdIsDone: true,
-        currentDirectoryId: ''
+        currentDirectoryId: '',
+        currentIndex: 0
       }
     },
 
@@ -60,19 +62,26 @@
 
       editDirectory (index, event) {
         clicked = null
-        this.
+        let target = event.target
+        if (target.tagName === 'INPUT') {
+          this.currentIndex = index
+          isEditing = true
+          target.removeAttribute('disabled')
+          target.focus()
+        }
       },
 
       updateDirectory () {
       },
       // 文件夹选择
-      showCurrent (id) {
+      showCurrent (id, index) {
         if (clicked) {
           clearTimeout(clicked)
         }
         clicked = setTimeout(() => {
-          if (clicked) {
+          if (clicked && !isEditing) {
             this.currentDirectoryId = id
+            this.currentIndex = index
             clicked = null
           }
         }, 200)
@@ -84,5 +93,16 @@
 <style lang="sass">
   .hidden {
     display: none;
+  }
+
+  .pages-list {
+    li {
+      input {
+        background: #eee;
+        &.white-bg {
+          background: #fff;
+        }
+      }
+    }
   }
 </style>
