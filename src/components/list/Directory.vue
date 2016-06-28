@@ -2,10 +2,10 @@
   <!-- 文件夹列表 -->
   <div id="pages">
     <p @click="newDirectory" class="page-button">+</p>
-    <ul class="pages-list"  @dbclick="editDirectory">
+    <ul class="pages-list"  >
       <!-- track_by是必须的 -->
-      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @click.prevent="showCurrent(directory._id.$oid)">          
-        <p><input type="text" value="{{ directory.name }}"></p>
+      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(directory._id.$oid)" >          
+        <p><input type="text" value="{{ directory.name }}" :disabled="directory.isEditing" @keyup.enter="updateDirectory(directory)"></p>
       </li>
       <!-- 用来新增文件夹的输入框 -->
       <li>
@@ -19,6 +19,8 @@
   import directory from 'src/js/directory'
   import _ from 'underscore'
   // import $ from 'jquery'
+
+  var clicked = null
 
   export default {
     data () {
@@ -56,12 +58,24 @@
         directory.create(newDirectory)
       },
 
-      editDirectory (event) {
+      editDirectory (index, event) {
+        clicked = null
+        this.
       },
 
+      updateDirectory () {
+      },
       // 文件夹选择
       showCurrent (id) {
-        this.currentDirectoryId = id
+        if (clicked) {
+          clearTimeout(clicked)
+        }
+        clicked = setTimeout(() => {
+          if (clicked) {
+            this.currentDirectoryId = id
+            clicked = null
+          }
+        }, 200)
       }
     }
   }
