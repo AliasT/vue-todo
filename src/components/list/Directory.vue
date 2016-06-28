@@ -1,0 +1,73 @@
+<template>
+  <!-- 文件夹列表 -->
+  <div id="pages">
+    <p @click="newDirectory" class="page-button">+</p>
+    <ul class="pages-list" @click.prevent="showCurrent" @dbclick="editDirectory">
+      <!-- track_by是必须的 -->
+      <li v-for="directory in directories" track-by="$index" data-index="{{$index}}">          
+        <p><input type="text" value="{{ directory.name }}"></p>
+      </li>
+      <!-- 用来新增文件夹的输入框 -->
+      <li>
+        <p><input type="text" placeholder="文件夹名称" :class="{ 'hidden': createdIsDone } " @keyup.enter="addDirectory"></p>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import directory from 'src/js/directory'
+  import _ from 'underscore'
+
+  export default {
+    data () {
+      return {
+        directories: [],
+        createdIsDone: true,
+        currentDirectoryId: ''
+      }
+    },
+
+    ready () {
+      // 获取文件夹列表, 渲染第一个文件夹的所有todo
+      directory.get((resJSON) => {
+        this.directories = resJSON
+        this.currentDirectoryId = _.first(this.directories)._id.$oid
+      })
+    },
+
+    // 数据监听列表
+    watch: {
+      'currentDirectoryId': function (newVal, oldVal) {
+
+      }
+    },
+    // 事件列表
+    methods: {
+      newDirectory (event) {
+        this.createdIsDone = false
+      },
+
+      addDirectory (event) {
+        this.createdIsDone = true   // 隐藏新建输入框
+        const newDirectory = { name: event.target.value.trim() }
+        this.directories.push(newDirectory)   // 显示数据先做改动
+        directory.create(newDirectory)
+      },
+
+      editDirectory (event) {
+      },
+
+      // 文件夹选择
+      showCurrent (event) {
+        
+      }
+    }
+  }
+</script>
+
+<style lang="sass">
+  .hidden {
+    display: none;
+  }
+</style>
