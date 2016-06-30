@@ -5,7 +5,7 @@
     <ul class="pages-list"  >
       <!-- track_by是必须的 -->
       <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(directory._id.$oid, $index)" >          
-        <p><input type="text" value="{{ directory.name }}" disabled :class="{ 'white-bg': currentIndex === $index }"@keyup.enter="updateDirectory(directory)"></p>
+        <p><input type="text" v-model="directory.name" disabled :class="{ 'white-bg': currentIndex === $index }"@keyup.enter="syncDirectory(directory)"></p>
       </li>
       <!-- 用来新增文件夹的输入框 -->
       <li>
@@ -71,7 +71,8 @@
         }
       },
 
-      updateDirectory () {
+      syncDirectory (modifiedDirectory) {
+        directory.patch(modifiedDirectory)
       },
       // 文件夹选择
       showCurrent (id, index) {

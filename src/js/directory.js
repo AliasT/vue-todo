@@ -22,5 +22,15 @@ export default {
     }).fail(function (xhr, status) {
 
     })
+  },
+
+  patch (reqJSON, fn) {
+    $.ajax({
+      url: '/directory/' + reqJSON._id.$oid,
+      method: 'patch',
+      data: { req: JSON.stringify(reqJSON) }
+    }).done(function (resJSON) {
+      fn(resJSON)
+    })
   }
 }
