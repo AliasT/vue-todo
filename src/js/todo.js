@@ -1,24 +1,28 @@
 import storage from 'src/js/storage'
 import _ from 'underscore'
 import $ from 'jquery'
+
 export default {
   // 添加todo
-  addTodo (todo, listId) {
-    let newTodo = _.extend({}, todo)
-    newTodo.id = Date.now()
-    newTodo.listId = listId
-    storage.setItem(newTodo.id, newTodo)  // 添加一项至具体的列表
-
-    let list = storage.getItem(listId)
-    list.push(newTodo.id)
-    storage.setItem(listId, list)
-
-    return newTodo
+  addTodo (reqJSON, directoryId) {
+    $.ajax({
+      url: '/directory/' + directoryId + '/todo',
+      type: 'post',
+      data: { req: JSON.stringify(reqJSON) }
+    }).fail(function () {
+      // todo
+    })
   },
 
   // 更新todo
   updateTodo (todo) {
-    storage.setItem(todo.id, todo)
+    $.ajax({
+      url: '/directory/' + todo.directory_id.$oid + '/todo/' + todo._id.$oid,
+      type: 'patch',
+      data: { req: JSON.stringify(todo) }
+    }).fail(function () {
+      // todo
+    })
   },
 
   // 获取所有todos

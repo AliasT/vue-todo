@@ -16,7 +16,6 @@
       List,
       Directory
     },
-
     data () {
       return {}
     },

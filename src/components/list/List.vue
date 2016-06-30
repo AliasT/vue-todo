@@ -1,11 +1,11 @@
 <template>
   <div id="detail">
     <!-- 输入框 -->
-    <form action="" >
+    <form action="" @submit.prevent="addTodo(defaultTodo)">
       <div class="flex center">
         <input type="text" class="flex-item-1"  v-model="defaultTodo.content" />
         <p class="todo-button">
-          <input type="submit" value="new" @click.prevent="addTodo">
+          <input type="submit" value="new" @click.prevent="addTodo(defaultTodo)">
         </p>
       </div>
     </form>
@@ -15,8 +15,8 @@
       <ul>
         <li v-for="todo in todos" class="flex center">
           <p>
-            <input type="checkbox" v-model="todo.is_completed" @click="updateStatus" />
-            <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateContent" @blur="updateContent" />
+            <input type="checkbox" v-model="todo.is_completed" @change="updateTodo(todo)" />
+            <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateTodo(todo)" @blur="updateTodo(todo)" />
           </p>
         </li>
       </ul>
@@ -38,34 +38,25 @@ export default {
   data () {
     return {
       defaultTodo: _.extend({}, defaultTodo),
-      todos: []
+      todos: [],
+      parentId: ''
     }
   },
   methods: {
-    updateStatus (event) {
-      this.todo.isCompleted = !this.todo.isCompleted
-      this.updateTodo(event)
-    },
-    // 更新内容
-    updateContent (event) {
-      this.todo.content = event.target.value
-      this.updateTodo(event)
-    },
-
-    updateTodo (event) {
-      todo.updateTodo(this.todo)
-      this.$dispatch('updated')
+    updateTodo (modifiedTodo) {
+      todo.updateTodo(modifiedTodo)
     },
 
     addTodo (event) {
-      const newTodo = todo.addTodo(this.defaultTodo, 1464946412042)
+      todo.addTodo(_.extend({ directory_id: this.parentId }, this.defaultTodo}), this.parentId)
+      this.todos.unshift(this.defaultTodo)
       this.defaultTodo = _.extend({}, defaultTodo)
-      this.todos.unshift(newTodo)
     }
   },
 
   events: {
     updateDirectoryId: function (directoryId) {
+      this.parentId = directoryId
       todo.getTodos(directoryId, (resJSON) => {
         this.todos = resJSON
       })
