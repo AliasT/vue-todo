@@ -1,38 +1,34 @@
 import storage from 'src/js/storage'
 import _ from 'underscore'
-import $ from 'jquery'
+import Wilddog from 'wilddog'
+
+function getBaseUrl (id) {
+  return '/' + id + '/todo'
+}
+
+function getTodoUrl (directoryId) {
+  return function (id) {
+    return getBaseUrl(directoryId) + '/' + id
+  }
+}
 
 export default {
-  // 添加todo
-  addTodo (reqJSON, directoryId) {
-    $.ajax({
-      url: '/directory/' + directoryId + '/todo',
-      type: 'post',
-      data: { req: JSON.stringify(reqJSON) }
-    }).fail(function () {
-      // todo
+  _ref: new Wilddog('https://xiaobing.wilddogio.com/directory'),
+  // 获取所有todos
+  getTodos (id, fn) {
+    this._ref.child(getBaseUrl(id)).on('value', function (resJSON) {
+      fn(resJSON.val())
     })
+  },
+
+  // 添加todo
+  addTodo (reqJSON, id) {
+    this._ref.child(getBaseUrl(id)).push(reqJSON)
   },
 
   // 更新todo
-  updateTodo (todo) {
-    $.ajax({
-      url: '/directory/' + todo.directory_id.$oid + '/todo/' + todo._id.$oid,
-      type: 'patch',
-      data: { req: JSON.stringify(todo) }
-    }).fail(function () {
-      // todo
-    })
-  },
-
-  // 获取所有todos
-  getTodos (directoryId, fn) {
-    $.ajax({
-      url: ['/directory/', directoryId, '/todo'].join(''),
-      method: 'get'
-    }).done(function (resJSON) {
-      fn(resJSON)
-    })
+  updateTodo (key, todo) {
+    this._ref.child(getTodoUrl(todo.directory_id)(key)).update(todo)
   },
 
   getCompleted (listId) {

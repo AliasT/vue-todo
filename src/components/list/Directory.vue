@@ -4,8 +4,8 @@
     <p @click="newDirectory" class="page-button">+</p>
     <ul class="pages-list"  >
       <!-- track_by是必须的 -->
-      <li v-for="directory in directories" track-by="$index" data-index="{{ $index }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(directory._id.$oid, $index)" >          
-        <p><input type="text" v-model="directory.name" disabled :class="{ 'white-bg': currentIndex === $index }"@keyup.enter="syncDirectory(directory)"></p>
+      <li v-for="(key, directory) in directories" track-by="$index" data-index="{{ key }}" @dblclick="editDirectory($index, $event)" @click="showCurrent(key, $index)" >          
+        <p><input type="text" v-model="directory.name" disabled :class="{ 'white-bg': currentIndex === $index }"@keyup.enter="syncDirectory(key, directory)"></p>
       </li>
       <!-- 用来新增文件夹的输入框 -->
       <li>
@@ -17,16 +17,17 @@
 
 <script>
   import directory from 'src/js/directory'
-  import _ from 'underscore'
+  // import _ from 'underscore'
   // import $ from 'jquery'
-
+  // import fetch from "whatwg-fetch"
+  
   var clicked = null
   var isEditing = false
 
   export default {
     data () {
       return {
-        directories: [],
+        directories: {},
         createdIsDone: true,
         currentDirectoryId: '',
         currentIndex: 0
@@ -35,9 +36,8 @@
 
     ready () {
       // 获取文件夹列表, 渲染第一个文件夹的所有todo
-      directory.get((resJSON) => {
-        this.directories = resJSON
-        this.currentDirectoryId = _.first(this.directories)._id.$oid
+      directory._ref.on('value', (snapshot) => {
+        this.directories = snapshot.val()
       })
     },
 
@@ -55,8 +55,7 @@
 
       addDirectory (event) {
         this.createdIsDone = true   // 隐藏新建输入框
-        const newDirectory = { name: event.target.value.trim() }
-        this.directories.push(newDirectory)   // 显示数据先做改动
+        var newDirectory = { name: event.target.value.trim() }
         directory.create(newDirectory)
       },
 
@@ -71,17 +70,17 @@
         }
       },
 
-      syncDirectory (modifiedDirectory) {
-        directory.patch(modifiedDirectory)
+      syncDirectory (key, modifiedDirectory) {
+        directory.patch({ [key]: modifiedDirectory })
       },
       // 文件夹选择
-      showCurrent (id, index) {
+      showCurrent (key, index) {
         if (clicked) {
           clearTimeout(clicked)
         }
         clicked = setTimeout(() => {
           if (clicked && !isEditing) {
-            this.currentDirectoryId = id
+            this.currentDirectoryId = key
             this.currentIndex = index
             clicked = null
           }

@@ -13,10 +13,10 @@
     <!-- 展示列表 -->
     <div id="item-list">
       <ul>
-        <li v-for="todo in todos" class="flex center">
+        <li v-for="(key, todo) in todos" class="flex center">
           <p>
-            <input type="checkbox" v-model="todo.is_completed" @change="updateTodo(todo)" />
-            <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateTodo(todo)" @blur="updateTodo(todo)" />
+            <input type="checkbox" v-model="todo.is_completed" @change="updateTodo(key, todo)" />
+            <input type="text" class="flex-item-1" v-model="todo.content" @keyup.enter="updateTodo(key, todo)" @blur="updateTodo(key, todo)" />
           </p>
         </li>
       </ul>
@@ -38,18 +38,17 @@ export default {
   data () {
     return {
       defaultTodo: _.extend({}, defaultTodo),
-      todos: [],
+      todos: {},
       parentId: ''
     }
   },
   methods: {
-    updateTodo (modifiedTodo) {
-      todo.updateTodo(modifiedTodo)
+    updateTodo (key, modifiedTodo) {
+      todo.updateTodo(key, modifiedTodo)
     },
 
     addTodo (event) {
-      todo.addTodo(_.extend({ directory_id: this.parentId }, this.defaultTodo}), this.parentId)
-      this.todos.unshift(this.defaultTodo)
+      todo.addTodo(_.extend({ directory_id: this.parentId }, this.defaultTodo), this.parentId)
       this.defaultTodo = _.extend({}, defaultTodo)
     }
   },

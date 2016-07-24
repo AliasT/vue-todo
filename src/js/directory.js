@@ -1,36 +1,13 @@
-import $ from 'jquery'
+// import fetch from "whatwg-fetch"
+var Wilddog = require('wilddog')
 
 export default {
+  _ref: new Wilddog('https://xiaobing.wilddogio.com/directory'),
   create (reqJSON) {
-    $.ajax({
-      url: '/directory',
-      type: 'post',
-      data: reqJSON
-    }).done(function (resJSON) {
-
-    }).fail(function (xhr, status) {
-
-    })
+    debugger
+    this._ref.push(reqJSON)
   },
-
-  get (fn) {
-    $.ajax({
-      url: '/directory',
-      method: 'get'
-    }).done(function (resJSON) {
-      fn(resJSON)
-    }).fail(function (xhr, status) {
-
-    })
-  },
-
-  patch (reqJSON, fn) {
-    $.ajax({
-      url: '/directory/' + reqJSON._id.$oid,
-      method: 'patch',
-      data: { req: JSON.stringify(reqJSON) }
-    }).done(function (resJSON) {
-      fn(resJSON)
-    })
+  patch (key, value) {
+    this._ref.update(key, value)
   }
 }
