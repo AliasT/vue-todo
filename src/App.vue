@@ -1,4 +1,4 @@
-<template>
+app<template>
   <div id="app">
     <Directory></Directory>
     <List></List>
